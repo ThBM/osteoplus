@@ -80,17 +80,19 @@ router.post("/patient/add", (req, res) => {
 
 //Afficher patient
 router.get("/patient/:id", (req, res) => {
-  Patient.findById(req.params.id).populate("user").exec( (err, patient) => {
+  Patient.findById(req.params.id, (err, patient) => {
     if(err) console.log(err)
 
-    console.log("patient user" + patient.user._id +".")
-    console.log("current user" + req.user._id +".")
-    console.log(patient.user._id == req.user._id)
-    if(patient.user._id != req.user._id) {
-      req.flash("danger", "Vous n'avez pas accès à ce patient.")
+    if(!patient) {
+      req.flash("danger", "Ce patient n'existe pas.")
       res.redirect("/app/patient/list")
     } else {
-      res.render("app/patient/show", {patient : patient})
+      if(!patient.user.equals(req.user._id)) {
+        req.flash("danger", "Vous n'avez pas accès à ce patient.")
+        res.redirect("/app/patient/list")
+      } else {
+        res.render("app/patient/show", {patient : patient})
+      }
     }
   })
 })
@@ -117,7 +119,7 @@ router.post("/patient/:id", (req, res) => {
       if(err) {
         console.log(err)
       } else {
-        if(patient.user != req.user._id) {
+        if(!patient.user.equals(req.user._id)) {
           req.flash("danger", "Vous n'avez pas accès à ce patient.")
           res.redirect("/patient/list")
         } else {
@@ -146,12 +148,12 @@ router.post("/patient/:id", (req, res) => {
   }
 })
 
-// Liste des seéances pour un patient
+// Liste des séances pour un patient
 router.get("/patient/:id/seance/list", (req, res) => {
   Patient.findById(req.params.id, (err, patient) => {
     if(err) console.log(err)
 
-    if(patient.user != req.user._id) {
+    if(!patient.user.equals(req.user._id)) {
       req.flash("danger", "Vous n'avez pas accès à ce patient.")
       res.redirect("/patient/list")
     } else {
