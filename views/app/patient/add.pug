@@ -1,0 +1,39 @@
+extends ../../layout
+
+block content
+  h1 Ajouter un nouveau patient
+    
+  form(method="POST", action="/app/patient/add")
+    div.text-right(style="padding-top: 5px; padding-bottom: 5px;")
+      button.btn.btn-success(type="submit") Ajouter
+    
+    table.table.table-striped
+      tbody
+          tr
+            th(style="width: 200px;") Nom
+            td
+              input.form-control.editable(name="lastName", placeholder="Nom", required)
+          tr
+            th Prénom
+            td
+              input.form-control.editable(name="firstName", placeholder="Prénom", required)
+          tr
+            th Date de naissance
+            td
+              input.form-control.editable(name="birthday", type="date")
+          tr
+            th Email
+            td
+              input.form-control.editable(name="email", type="email", placeholder="Email")
+          tr
+            th Téléphone
+            td
+              input.form-control.editable(name="phone", type="tel", placeholder="Téléphone")
+          tr
+            th Adresse
+            td
+              textarea.form-control.editable(name="address", placeholder="Adresse")
+  
+  
+
+    

@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  h1 Login
+  form(method="POST", action="/user/login")
+    #from-group
+      label Username :
+      input.form-control(name="username", type="text", value="ThBM")
+    #from-group
+      label Password :
+      input.form-control(name="password", type="password", value="test")
+    br
+    input.btn.btn-primary(type="submit", value="Login")
+      
+            
+    

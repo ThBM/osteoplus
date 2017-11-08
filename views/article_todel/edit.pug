@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+  h1 Modifier un article
+  form(method="POST", action="/article/edit/" + article._id)
+    #from-group
+      label Title :
+      input.form-control(name="title", type="text", value=article.title)
+    #from-group
+      label Body :
+      textarea.form-control(name="body", type="text")= article.body
+    br
+    input.btn.btn-primary(type="submit", value="Submit")

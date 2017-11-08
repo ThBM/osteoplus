@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  h1 Ajouter un article
+  form(method="POST", action="/article/add")
+    #from-group
+      label Title :
+      input.form-control(name="title", type="text")
+    #from-group
+      label Body :
+      textarea.form-control(name="body", type="text")
+    br
+    input.btn.btn-primary(type="submit", value="Submit")
+      
+            
+    

@@ -1,0 +1,47 @@
+extends ../../layout
+
+block content
+  h1 #{patient.firstName} #{patient.lastName}
+  
+  include menu.pug
+  
+  form(method="POST", action="/app/patient/"+patient._id)
+    div.text-right(style="padding-top: 5px; padding-bottom: 5px;")
+      button.btn.btn-success.saveEdit.showWhenEdit(type="submit") Enregistrer
+      a.btn.btn-danger.saveEdit.showWhenEdit(href="/app/patient/"+patient._id) Annuler
+      a.btn.btn-warning.startEdit.hideWhenEdit Modifier
+      a.btn.btn-danger.delete.hideWhenEdit Supprimer
+    
+    table.table.table-striped
+      tbody
+          tr
+            th(style="width: 200px;") Nom
+            td
+              input.form-control.editable(name="lastName", value=patient.lastName, required, disabled)
+          tr
+            th Prénom
+            td
+              input.form-control.editable(name="firstName", value=patient.firstName, required, disabled)
+          tr
+            th Date de naissance
+            td
+              if patient.birthday
+                input.form-control.editable(name="birthday", type="date", value=patient.birthday.format("L"), disabled)
+              else
+                input.form-control.editable(name="birthday", type="date", disabled)
+          tr
+            th Email
+            td
+              input.form-control.editable(name="email", type="email", value=patient.email, disabled)
+          tr
+            th Téléphone
+            td
+              input.form-control.editable(name="phone", type="tel", value=patient.phone, disabled)
+          tr
+            th Adresse
+            td
+              textarea.form-control.editable(name="address", disabled)= patient.address
+  
+  
+
+    
