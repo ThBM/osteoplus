@@ -7,16 +7,10 @@ block variables
 block content
   h1 #{patient.firstName} #{patient.lastName}
 
-  include ../subMenu.pug
+  include ../subMenu.pug  
   
-  //mixin menuPatient(ongletActif)
-    ul.nav.nav-tabs
-      li.active
-        a Fiche patient
-      li
-        a(href="/app/patient/"+patient.id+"/seance/list") Séances
-  
-  
+  p.text-right
+    a.btn.btn-success(href="/app/patient/"+patient._id+"/seance/add") Ajouter  
   
   table.table.table-striped
     thead

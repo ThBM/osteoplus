@@ -10,7 +10,7 @@ const Seance = require("../models/seance.js")
 
 
 
-//Access control
+//Middleware pour vérifier que l'utilisateur est bien connecté.
 function ensureAuthenticated(req, res, next) {
   if(req.isAuthenticated()) {
     return next()
@@ -21,6 +21,24 @@ function ensureAuthenticated(req, res, next) {
 }
 router.use(ensureAuthenticated)
 
+//Middleware pour vérifier que l'utilisateur a bien les droits sur le patient
+function checkUserRightsForPatient(req, res, next) {
+  Patient.findById(req.params.id, (err, patient) => {
+    if(err) console.log(err)
+    if(!patient) {
+      req.flash("danger", "Ce patient n'existe pas.")
+      res.redirect("/app/patient")
+    } else {
+      if(!patient.user.equals(req.user._id)) {
+        req.flash("danger", "Vous n'avez pas accès à ce patient.")
+        res.redirect("/app/patient")
+      } else {
+        req.middlewareData = {patient: patient}
+        next()
+      }
+    }
+  })
+}
 
 // Dashboard
 router.get("/dashboard", (req, res) => {
@@ -28,7 +46,7 @@ router.get("/dashboard", (req, res) => {
 })
 
 //Liste des patients
-router.get("/patient/list", (req, res) => {
+router.get("/patient", (req, res) => {
   let query = {
     firstName: new RegExp( (req.query.firstName) ? req.query.firstName : "" , "i"),
     lastName: new RegExp( (req.query.lastName) ? req.query.lastName : "" , "i")
@@ -71,7 +89,7 @@ router.post("/patient/add", (req, res) => {
     patient.save( (err) => {
       console.log(err);
       req.flash("success", "Le patient a été ajouté.")
-      res.redirect("/app/patient/list")
+      res.redirect("/app/patient")
     })
   }
 
@@ -79,27 +97,15 @@ router.post("/patient/add", (req, res) => {
 
 
 //Afficher patient
-router.get("/patient/:id", (req, res) => {
-  Patient.findById(req.params.id, (err, patient) => {
-    if(err) console.log(err)
-
-    if(!patient) {
-      req.flash("danger", "Ce patient n'existe pas.")
-      res.redirect("/app/patient/list")
-    } else {
-      if(!patient.user.equals(req.user._id)) {
-        req.flash("danger", "Vous n'avez pas accès à ce patient.")
-        res.redirect("/app/patient/list")
-      } else {
-        res.render("app/patient/show", {patient : patient})
-      }
-    }
-  })
+router.get("/patient/:id", checkUserRightsForPatient, (req, res) => {
+  let patient = req.middlewareData.patient
+  res.render("app/patient/show", {patient: patient})
 })
 
-
 //Modifier un patient
-router.post("/patient/:id", (req, res) => {
+router.post("/patient/:id", checkUserRightsForPatient, (req, res) => {
+
+  let patient = req.middlewareData.patient
 
   //Validation des données
   req.checkBody("lastName", "Le nom est obligatoire.").not().isEmpty()
@@ -115,60 +121,45 @@ router.post("/patient/:id", (req, res) => {
     }
     res.redirect("/app/patient/" + req.params.id)
   } else {
-    Patient.findById(req.params.id, (err, patient) => {
-      if(err) {
-        console.log(err)
-      } else {
-        if(!patient.user.equals(req.user._id)) {
-          req.flash("danger", "Vous n'avez pas accès à ce patient.")
-          res.redirect("/patient/list")
-        } else {
-          let newPatient = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            birthday: birthday.isValid() ? birthday : null,
-            email: req.body.email,
-            phone: req.body.phone,
-            address: req.body.address
-          }
-
-          let query = {_id: req.params.id}
-
-          Patient.update(query, newPatient, (err, patient) => {
-            if(err) {
-              console.log(err)
-            } else {
-              req.flash("success", "Patient  edited.")
-              res.redirect("/app/patient/" + req.params.id)
-            }
-          })
-        }
+      let newPatient = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthday: birthday.isValid() ? birthday : null,
+        email: req.body.email,
+        phone: req.body.phone,
+        address: req.body.address
       }
-    })
+
+      let query = {_id: patient._id}
+
+      Patient.update(query, newPatient, (err, patient) => {
+        if(err) {
+          console.log(err)
+        } else {
+          req.flash("success", "La fiche patient a été modifiée.")
+          res.redirect("/app/patient/" + patient._id)
+        }
+      })
   }
 })
 
 // Liste des séances pour un patient
-router.get("/patient/:id/seance/list", (req, res) => {
-  Patient.findById(req.params.id, (err, patient) => {
+router.get("/patient/:id/seance", checkUserRightsForPatient, (req, res) => {
+  let patient = req.middlewareData.patient
+  Seance.findForPatient(patient._id, (err, seances) => {
     if(err) console.log(err)
-
-    if(!patient.user.equals(req.user._id)) {
-      req.flash("danger", "Vous n'avez pas accès à ce patient.")
-      res.redirect("/app/patient/list")
-    } else {
-
-      Seance.findForPatient(patient.id, (err, seances) => {
-        if(err) console.log(err)
-        res.render("app/patient/seance/list", {patient : patient, seances: seances})
-      })
-    }
+    res.render("app/patient/seance/list", {patient : patient, seances: seances})
   })
+})
+
+// Ajouter une séance pour un patient
+router.get("/patient/:id/seance/add", checkUserRightsForPatient, (req, res) => {
+  res.send("Not implemented yet.")
 })
 
 
 
-
+//Formatage de la date donnée en input
 function dateValidation(value) {
   let split = value.split(/\//);
 		if(value.match(/^[0-3]?[0-9]\/[0-1]?[0-9]\/[0-9]{4}$/))
@@ -182,9 +173,6 @@ function dateValidation(value) {
 		else
 			return null;
 }
-
-
-
 
 
 module.exports = router
