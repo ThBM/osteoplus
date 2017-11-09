@@ -1,0 +1,42 @@
+mixin timeInput(name, selectedHour, selectedMinute)
+  span.timeInput-group  
+    select(name=name)&attributes(attributes)
+      each val in ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
+        if selectedHour == val
+          option(value=val, selected)= val
+        else
+          option(value=val)= val
+    |  : 
+    select(name=name)&attributes(attributes)
+      each val in ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"]
+        if selectedMinute == val
+          option(value=val, selected)= val
+        else
+          option(value=val)= val
+
+mixin dateInput(name, selectedDay, selectedMonth, selectedYear)
+  span.dateInput-group
+    select.dateInput-day(name=name)&attributes(attributes)
+      each val in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+        if selectedDay == val
+          option(value=val, selected)= val
+        else
+          option(value=val)= val
+    |  / 
+    select.dateInput-month(name=name)&attributes(attributes)
+      each val in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+        if selectedMonth == val
+          option(value=val, selected)= val
+        else
+          option(value=val)= val
+    |  / 
+    select.dateInput-year(name=name)&attributes(attributes)
+      - var val = 1900
+      while val <= 2100
+        if selectedYear == val
+          option(value=val, selected)= val
+        else
+          option(value=val)= val
+        - val++
+mixin dateInputMoment(name, momentObject)
+  +dateInput(name, momentObject.format("DD"), momentObject.format("MM"), momentObject.format("YYYY"))&attributes(attributes)

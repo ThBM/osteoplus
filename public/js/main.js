@@ -18,7 +18,7 @@ $(function() {
   */
 
 
-
+  //Edition
   var edit = false
   $(".showWhenEdit").hide()
   $(".startEdit").click( (e) => {
@@ -35,5 +35,10 @@ $(function() {
     }
   })
 
+  //Jour par d=fault est aujourd'hui
+  //A mettre à jour avec moment client side
+  $("select.dateInput-day.nowDefault").val("23");
+  $("select.dateInput-month.nowDefault").val("05");
+  $("select.dateInput-year.nowDefault").val("1996");
 
 })

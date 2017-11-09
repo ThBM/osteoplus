@@ -9,19 +9,21 @@ block content
 
   include ../subMenu.pug  
   
+  br
+  
   p.text-right
     a.btn.btn-success(href="/app/patient/"+patient._id+"/seance/add") Ajouter  
   
   table.table.table-striped
     thead
       tr
-        th Date
+        th Date de la séance
         th Commentaire
         th 
     tbody
       each seance, i in seances
         tr
-          td= seance.startTime
-          td= patient.firstName
+          td= seance.startTime.format("L LT")
+          td= seance.comments
           td(style="width: 100px;")
             a.btn.btn-info(href="/app/patient/seance/show/" + seance.id) Voir

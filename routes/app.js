@@ -24,7 +24,7 @@ router.use(ensureAuthenticated)
 //Middleware pour vérifier que l'utilisateur a bien les droits sur le patient
 function checkUserRightsForPatient(req, res, next) {
   Patient.findById(req.params.id, (err, patient) => {
-    if(err) console.log(err)
+    //if(err) console.log(err)
     if(!patient) {
       req.flash("danger", "Ce patient n'existe pas.")
       res.redirect("/app/patient")
@@ -66,7 +66,7 @@ router.post("/patient/add", (req, res) => {
   //Validation des données
   req.checkBody("lastName", "Le nom est obligatoire.").not().isEmpty()
   req.checkBody("firstName", "Le prénom est obligatoire.").not().isEmpty()
-  let birthday = moment(dateValidation(req.body.birthday))
+  let birthday = moment.createFromInput(req.body.birthday)
 
   const errors = req.validationErrors();
   if (errors) {
@@ -79,7 +79,7 @@ router.post("/patient/add", (req, res) => {
       user: req.user._id,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      birthday: birthday.isValid() ? birthday : null,
+      birthday: birthday,
       email: req.body.email,
       phone: req.body.phone,
       address: req.body.address
@@ -109,8 +109,8 @@ router.post("/patient/:id", checkUserRightsForPatient, (req, res) => {
   //Validation des données
   req.checkBody("lastName", "Le nom est obligatoire.").not().isEmpty()
   req.checkBody("firstName", "Le prénom est obligatoire.").not().isEmpty()
-  let birthday = moment(dateValidation(req.body.birthday))
-  console.log(birthday);
+  let birthday = moment.createFromInput(req.body.birthday)
+
 
 
   const errors = req.validationErrors();
@@ -123,7 +123,7 @@ router.post("/patient/:id", checkUserRightsForPatient, (req, res) => {
       let newPatient = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        birthday: birthday.isValid() ? birthday : null,
+        birthday: birthday,
         email: req.body.email,
         phone: req.body.phone,
         address: req.body.address
@@ -131,7 +131,7 @@ router.post("/patient/:id", checkUserRightsForPatient, (req, res) => {
 
       let query = {_id: patient._id}
 
-      Patient.update(query, newPatient, (err, patient) => {
+      Patient.update(query, newPatient, (err, patientUpdated) => {
         if(err) {
           console.log(err)
         } else {
@@ -153,14 +153,22 @@ router.get("/patient/:id/seance", checkUserRightsForPatient, (req, res) => {
 
 // Ajouter une séance pour un patient
 router.get("/patient/:id/seance/add", checkUserRightsForPatient, (req, res) => {
+  let patient = req.middlewareData.patient
+
+  res.render("app/patient/seance/add", {patient: patient})
+})
+router.post("/patient/:id/seance/add", checkUserRightsForPatient, (req, res) => {
 
   let patient = req.middlewareData.patient
 
+  let startTime = moment.createFromInput(req.body.startDate, req.body.startTime)
+  let endTime = moment.createFromInput(req.body.startDate, req.body.endTime)
+
   let seance = Seance({
     patient: patient._id,
-    startTime: moment(),
-    endTime: moment(),
-    comments: "Commentaire test"
+    startTime: startTime,
+    endTime: endTime,
+    comments: req.body.comments
   })
 
   seance.save( (err) => {

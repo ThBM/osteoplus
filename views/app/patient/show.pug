@@ -9,6 +9,9 @@ block content
   
   include subMenu.pug
   
+  include ../../layout/formsDateTime
+  
+  
   form(method="POST", action="/app/patient/"+patient._id)
     div.text-right(style="padding-top: 5px; padding-bottom: 5px;")
       button.btn.btn-success.saveEdit.showWhenEdit(type="submit") Enregistrer
@@ -28,11 +31,8 @@ block content
               input.form-control.editable(name="firstName", value=patient.firstName, required, disabled)
           tr
             th Date de naissance
-            td
-              if patient.birthday
-                input.form-control.editable(name="birthday", type="text", value=patient.birthday.format("L"), disabled)
-              else
-                input.form-control.editable(name="birthday", type="date", disabled)
+            td.form-group.form-inline
+              +dateInputMoment("birthday", patient.birthday)(disabled).form-control.editable
           tr
             th Email
             td
