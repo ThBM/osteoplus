@@ -145,6 +145,7 @@ router.post("/patient/:id", checkUserRightsForPatient, (req, res) => {
 // Liste des séances pour un patient
 router.get("/patient/:id/seance", checkUserRightsForPatient, (req, res) => {
   let patient = req.middlewareData.patient
+  
   Seance.findForPatient(patient._id, (err, seances) => {
     if(err) console.log(err)
     res.render("app/patient/seance/list", {patient : patient, seances: seances})
@@ -163,6 +164,8 @@ router.post("/patient/:id/seance/add", checkUserRightsForPatient, (req, res) => 
 
   let startTime = moment.createFromInput(req.body.startDate, req.body.startTime)
   let endTime = moment.createFromInput(req.body.startDate, req.body.endTime)
+
+  console.log(startTime);
 
   let seance = Seance({
     patient: patient._id,

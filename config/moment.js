@@ -65,8 +65,8 @@ moment.locale("fr")
 
 moment.createFromInput = function(date, time) {
   if (time !== undefined)
-    return moment.utc([Number(date[2]), Number(date[1])-1, Number(date[0]), Number(time[0]), Number(time[1])])
-  return moment.utc([Number(date[2]), Number(date[1])-1, Number(date[0])])
+    return moment([Number(date[2]), Number(date[1])-1, Number(date[0]), Number(time[0]), Number(time[1])])
+  return moment([Number(date[2]), Number(date[1])-1, Number(date[0])])
 }
 
 
