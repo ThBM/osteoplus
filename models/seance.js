@@ -8,7 +8,7 @@ let seanceSchema = mongoose.Schema({
   endTime    : {type: "Moment", require: true}
 })
 
-seanceSchema.statics.findForUser = function(patientId, query, callback) {
+seanceSchema.statics.findForPatient = function(patientId, query, callback) {
   query.patient = patientId
   return this.find(query, callback)
 }

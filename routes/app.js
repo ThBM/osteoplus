@@ -155,7 +155,7 @@ router.get("/patient/:id/seance/list", (req, res) => {
 
     if(!patient.user.equals(req.user._id)) {
       req.flash("danger", "Vous n'avez pas accès à ce patient.")
-      res.redirect("/patient/list")
+      res.redirect("/app/patient/list")
     } else {
 
       Seance.findForPatient(patient.id, (err, seances) => {
