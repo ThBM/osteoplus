@@ -26,7 +26,7 @@ block content
             th Date de naissance
             td
               if patient.birthday
-                input.form-control.editable(name="birthday", type="date", value=patient.birthday.format("L"), disabled)
+                input.form-control.editable(name="birthday", type="text", value=patient.birthday.format("L"), disabled)
               else
                 input.form-control.editable(name="birthday", type="date", disabled)
           tr
