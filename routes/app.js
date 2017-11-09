@@ -75,7 +75,6 @@ router.post("/patient/add", (req, res) => {
     }
     res.redirect("/app/patient/add")
   } else {
-    console.log(req.body.birthday)
     patient = new Patient({
       user: req.user._id,
       firstName: req.body.firstName,
@@ -154,7 +153,21 @@ router.get("/patient/:id/seance", checkUserRightsForPatient, (req, res) => {
 
 // Ajouter une séance pour un patient
 router.get("/patient/:id/seance/add", checkUserRightsForPatient, (req, res) => {
-  res.send("Not implemented yet.")
+
+  let patient = req.middlewareData.patient
+
+  let seance = Seance({
+    patient: patient._id,
+    startTime: moment(),
+    endTime: moment(),
+    comments: "Commentaire test"
+  })
+
+  seance.save( (err) => {
+    console.log(err);
+    req.flash("success", "La séance a été ajoutée.")
+    res.redirect("/app/patient/" + patient._id + "/seance")
+  })
 })
 
 
