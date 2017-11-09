@@ -1,8 +1,33 @@
 extends ../../../layout
 
+block variables
+  - var menu = "Patients"
+  - var subMenu = "Séances"
+
 block content
-  h1 Seance #{patient.firstName} #{patient.lastName}
+  h1 #{patient.firstName} #{patient.lastName}
 
-  include ../menu.pug
-
-    table.table.table-striped
+  include ../subMenu.pug
+  
+  //mixin menuPatient(ongletActif)
+    ul.nav.nav-tabs
+      li.active
+        a Fiche patient
+      li
+        a(href="/app/patient/"+patient.id+"/seance/list") Séances
+  
+  
+  
+  table.table.table-striped
+    thead
+      tr
+        th Date
+        th Commentaire
+        th 
+    tbody
+      each seance, i in seances
+        tr
+          td= seance.startTime
+          td= patient.firstName
+          td(style="width: 100px;")
+            a.btn.btn-info(href="/app/patient/seance/show/" + seance.id) Voir

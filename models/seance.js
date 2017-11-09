@@ -5,7 +5,8 @@ const mongoose = require("../config/mongoose")
 let seanceSchema = mongoose.Schema({
   patient    : {type: mongoose.Schema.Types.ObjectId, ref: "Patient", require: true},
   startTime  : {type: "Moment", require: true},
-  endTime    : {type: "Moment", require: true}
+  endTime    : {type: "Moment", require: true},
+  comments   : {type: String, require: true}
 })
 
 seanceSchema.statics.findForPatient = function(patientId, query, callback) {

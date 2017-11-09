@@ -1,9 +1,13 @@
 extends ../../layout
 
+block variables
+  - var menu = "Patients"
+  - var subMenu = "Fiche patient"
+
 block content
   h1 #{patient.firstName} #{patient.lastName}
   
-  include menu.pug
+  include subMenu.pug
   
   form(method="POST", action="/app/patient/"+patient._id)
     div.text-right(style="padding-top: 5px; padding-bottom: 5px;")
