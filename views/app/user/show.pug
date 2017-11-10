@@ -1,0 +1,33 @@
+extends ../../layout
+
+block variables
+  - var menu = "Profil"
+  - var subMenu = "Profil"
+
+block content
+  h1 Gestion de votre profil
+    
+  include subMenu
+  
+  h3 Profil
+  
+  form(method="POST", action="/app/user")
+    div.text-right(style="padding-top: 5px; padding-bottom: 5px;")
+      button.btn.btn-success.saveEdit.showWhenEdit(type="submit") Enregistrer
+      a.btn.btn-danger.saveEdit.showWhenEdit(href="/app/user") Annuler
+      a.btn.btn-warning.startEdit.hideWhenEdit Modifier
+    
+    table.table.table-striped
+      tbody
+          tr
+            th(style="width: 200px;") Nom complet
+            td
+              input.form-control.editable(name="name", value=user.name, required)
+          tr
+            th Email
+            td
+              input.form-control.editable(name="email", type="email", value=user.email, required)
+  
+  
+
+    

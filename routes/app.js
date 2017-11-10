@@ -36,7 +36,10 @@ router.get("/agenda", (req, res) => {
   })
 })
 
-let patient = require("./patient")
+let patient = require("./app-patient")
 router.use("/patient", patient)
+
+let user = require("./app-user")
+router.use("/user", user)
 
 module.exports = router
