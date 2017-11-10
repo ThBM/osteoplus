@@ -22,7 +22,7 @@ $(function() {
   var edit = false
   $(".editable").attr("disabled", true)
   $(".showWhenEdit").hide()
-  
+
   $(".startEdit").click( (e) => {
     if(edit == false) {
       $(".editable").attr("disabled", false)
@@ -39,8 +39,8 @@ $(function() {
 
   //Jour par d=fault est aujourd'hui
   //A mettre à jour avec moment client side
-  $("select.dateInput-day.nowDefault").val("23");
-  $("select.dateInput-month.nowDefault").val("05");
-  $("select.dateInput-year.nowDefault").val("1996");
+  $("select.dateInput-day.nowDefault").val(moment().format("DD"));
+  $("select.dateInput-month.nowDefault").val(moment().format("MM"));
+  $("select.dateInput-year.nowDefault").val(moment().format("YYYY"));
 
 })

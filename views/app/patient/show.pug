@@ -24,15 +24,15 @@ block content
           tr
             th(style="width: 200px;") Nom
             td
-              input.form-control.editable(name="lastName", value=patient.lastName, required, disabled)
+              input.form-control.editable(name="lastName", value=patient.lastName, required)
           tr
             th Prénom
             td
-              input.form-control.editable(name="firstName", value=patient.firstName, required, disabled)
+              input.form-control.editable(name="firstName", value=patient.firstName, required)
           tr
             th Date de naissance
             td.form-group.form-inline
-              +dateInputMoment("birthday", patient.birthday)(disabled).form-control.editable
+              +dateInputMoment("birthday", patient.birthday).form-control.editable
           tr
             th Email
             td
@@ -40,11 +40,11 @@ block content
           tr
             th Téléphone
             td
-              input.form-control.editable(name="phone", type="tel", value=patient.phone, disabled)
+              input.form-control.editable(name="phone", type="tel", value=patient.phone)
           tr
             th Adresse
             td
-              textarea.form-control.editable(name="address", disabled)= patient.address
+              textarea.form-control.editable(name="address")= patient.address
   
   
 
