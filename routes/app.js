@@ -59,9 +59,17 @@ function checkUserRightsForPatientSeance(req, res, next) {
   })
 }
 
-// Dashboard
+//Dashboard
 router.get("/dashboard", (req, res) => {
   res.render("app/dashboard")
+})
+
+//Agenda
+router.get("/agenda", (req, res) => {
+  Seance.find().populate("patient").exec( (err, seances) => {
+    if (err) console.log(err)
+    res.render("app/agenda", {seances: seances})
+  })
 })
 
 //Liste des patients
