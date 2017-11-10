@@ -1,25 +1,28 @@
 extends ../layout
 
+block variables
+  - var menu = "Inscription"
+
 block content
-  h1 Register
+  h1 Inscription
   form(method="POST", action="/user/register")
     #from-group
-      label Name :
+      label Nom entier :
       input.form-control(name="name", type="text")
     #from-group
       label Email :
       input.form-control(name="email", type="email")
     #from-group
-      label Username :
+      label Nom d'utilisateur :
       input.form-control(name="username", type="text")
     #from-group
-      label Password :
+      label Mot de passe :
       input.form-control(name="password", type="password")
     #from-group
-      label Confirm password :
+      label Confirmer le mot de passe :
       input.form-control(name="password2", type="password")
     br
-    input.btn.btn-primary(type="submit", value="Register")
+    input.btn.btn-primary(type="submit", value="Inscription")
       
             
     

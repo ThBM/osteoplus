@@ -1,3 +1,4 @@
+block variables
 doctype html
 html
   head
@@ -20,24 +21,24 @@ html
         #navbar.collapse.navbar-collapse
           ul.nav.navbar-nav
             if user
-              li
+              li(class= menu == "Tableau de bord" ? "active" : "")
                 a(href='/app/dashboard') Tableau de bord
-              li
+              li(class= menu == "Agenda" ? "active" : "")
                 a(href='/app/agenda') Agenda
-              li
-                a(href='/app/patient/list') Patients
-              li
+              li(class= menu == "Patients" ? "active" : "")
+                a(href='/app/patient') Patients
+              li(class= menu == "Séances" ? "active" : "")
                 a(href='/app/seances') Séances
           ul.nav.navbar-nav.navbar-right
             if user
-              li
+              li(class= menu == "Profil" ? "active" : "")
                 a(href="/user/profil") Profil
               li
                 a(href="/user/logout") Déconnexion
             else
-              li
+              li(class= menu == "Inscription" ? "active" : "")
                 a(href="/user/register") Inscription
-              li
+              li(class= menu == "Connexion" ? "active" : "")
                 a(href="/user/login") Connexion
     
     

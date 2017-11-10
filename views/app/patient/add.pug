@@ -1,8 +1,14 @@
 extends ../../layout
 
+block variables
+  - var menu = "Patients"
+
 block content
   h1 Ajouter un nouveau patient
-    
+  
+  include ../../layout/formsDateTime
+
+  
   form(method="POST", action="/app/patient/add")
     div.text-right(style="padding-top: 5px; padding-bottom: 5px;")
       button.btn.btn-success(type="submit") Ajouter
@@ -12,27 +18,27 @@ block content
           tr
             th(style="width: 200px;") Nom
             td
-              input.form-control.editable(name="lastName", placeholder="Nom", required)
+              input.form-control(name="lastName", placeholder="Nom", required)
           tr
             th Prénom
             td
-              input.form-control.editable(name="firstName", placeholder="Prénom", required)
+              input.form-control(name="firstName", placeholder="Prénom", required)
           tr
             th Date de naissance
-            td
-              input.form-control.editable(name="birthday", type="date")
+            td.form-group.form-inline
+              +dateInput("birthday", "01", "01", "1900").form-control
           tr
             th Email
             td
-              input.form-control.editable(name="email", type="email", placeholder="Email")
+              input.form-control(name="email", type="email", placeholder="Email")
           tr
             th Téléphone
             td
-              input.form-control.editable(name="phone", type="tel", placeholder="Téléphone")
+              input.form-control(name="phone", type="tel", placeholder="Téléphone")
           tr
             th Adresse
             td
-              textarea.form-control.editable(name="address", placeholder="Adresse")
+              textarea.form-control(name="address", placeholder="Adresse")
   
   
 

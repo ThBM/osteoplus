@@ -1,0 +1,37 @@
+extends ../../../layout
+
+block variables
+  - var menu = "Patients"
+  - var subMenu = "Séances"
+
+block content
+  h1 #{patient.firstName} #{patient.lastName}
+
+  include ../subMenu.pug  
+    
+  h3 Ajouter une nouvelle séance
+  
+  form(method="POST", action="/app/patient/" + patient._id + "/seance/add")
+    div.text-right(style="padding-top: 5px; padding-bottom: 5px;")
+      button.btn.btn-success(type="submit") Ajouter
+    
+    include ../../../layout/formsDateTime
+    
+    table.table.table-striped
+      tbody
+          tr
+            th(style="width: 200px;") Date
+            td(colspan=2).form-group.form-inline
+              +dateInput("startDate", "01", "01", "2000").nowDefault.form-control
+          tr
+            th Horaires
+            td.form-group.form-inline
+              | Début : 
+              +timeInput("startTime", "09", "00").form-control
+            td.form-group.form-inline
+              | Fin : 
+              +timeInput("endTime", "09", "15").form-control
+          tr
+            th Commentaires
+            td(colspan=2)
+              textarea.form-control.editable(name="comments", placeholder="Commentaires")

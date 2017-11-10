@@ -1,0 +1,40 @@
+extends ../../../layout
+
+block variables
+  - var menu = "Patients"
+  - var subMenu = "Séances"
+
+block content
+  h1 #{patient.firstName} #{patient.lastName}
+
+  include ../subMenu.pug  
+    
+  h3 Séance
+  
+  form(method="POST", action="/app/patient/seance/"+seance._id)
+    div.text-right(style="padding-top: 5px; padding-bottom: 5px;")
+      button.btn.btn-success.saveEdit.showWhenEdit(type="submit") Enregistrer
+      a.btn.btn-danger.saveEdit.showWhenEdit(href="/app/patient/seance/"+seance._id) Annuler
+      a.btn.btn-warning.startEdit.hideWhenEdit Modifier
+      a.btn.btn-danger.delete.hideWhenEdit Supprimer
+    
+    include ../../../layout/formsDateTime
+    
+    table.table.table-striped
+      tbody
+          tr
+            th(style="width: 200px;") Date
+            td(colspan=2).form-group.form-inline
+              +dateInputMoment("startDate", seance.startTime).form-control.editable
+          tr
+            th Horaires
+            td.form-group.form-inline
+              | Début : 
+              +timeInputMoment("startTime", seance.startTime).form-control.editable
+            td.form-group.form-inline
+              | Fin : 
+              +timeInputMoment("endTime", seance.endTime).form-control.editable
+          tr
+            th Commentaires
+            td(colspan=2)
+              textarea.form-control.editable(name="comments", placeholder="Commentaires")= seance.comments
