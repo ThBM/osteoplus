@@ -20,7 +20,9 @@ $(function() {
 
   //Edition
   var edit = false
+  $(".editable").attr("disabled", true)
   $(".showWhenEdit").hide()
+  
   $(".startEdit").click( (e) => {
     if(edit == false) {
       $(".editable").attr("disabled", false)

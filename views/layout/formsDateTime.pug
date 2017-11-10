@@ -13,6 +13,8 @@ mixin timeInput(name, selectedHour, selectedMinute)
           option(value=val, selected)= val
         else
           option(value=val)= val
+mixin timeInputMoment(name, momentObject)
+  +timeInput(name, momentObject.format("HH"), momentObject.format("mm"))&attributes(attributes)
 
 mixin dateInput(name, selectedDay, selectedMonth, selectedYear)
   span.dateInput-group

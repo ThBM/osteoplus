@@ -40,6 +40,25 @@ function checkUserRightsForPatient(req, res, next) {
   })
 }
 
+//Middleware pour vérifier que l'utilisateur a bien les droits sur le patient concernant la séance
+function checkUserRightsForPatientSeance(req, res, next) {
+  Seance.findById(req.params.id).populate("patient").exec( (err, seance) => {
+    //if(err) console.log(err)
+    if(!seance) {
+      req.flash("danger", "Cette séance n'existe pas.")
+      res.redirect("/app/patient")
+    } else {
+      if(!seance.patient.user.equals(req.user._id)) {
+        req.flash("danger", "Vous n'avez pas accès à ce patient.")
+        res.redirect("/app/patient")
+      } else {
+        req.middlewareData = {seance: seance}
+        next()
+      }
+    }
+  })
+}
+
 // Dashboard
 router.get("/dashboard", (req, res) => {
   res.render("app/dashboard")
@@ -145,8 +164,8 @@ router.post("/patient/:id", checkUserRightsForPatient, (req, res) => {
 // Liste des séances pour un patient
 router.get("/patient/:id/seance", checkUserRightsForPatient, (req, res) => {
   let patient = req.middlewareData.patient
-  
-  Seance.findForPatient(patient._id, (err, seances) => {
+
+  Seance.findForPatient(patient._id, {}, (err, seances) => {
     if(err) console.log(err)
     res.render("app/patient/seance/list", {patient : patient, seances: seances})
   })
@@ -181,10 +200,40 @@ router.post("/patient/:id/seance/add", checkUserRightsForPatient, (req, res) => 
   })
 })
 
+//Afficher une séance
+router.get("/patient/seance/:id", checkUserRightsForPatientSeance, (req, res) => {
+  let seance = req.middlewareData.seance
+  res.render("app/patient/seance/show", {patient: seance.patient, seance: seance})
+})
+
+//Modifier une séance
+router.post("/patient/seance/:id", checkUserRightsForPatientSeance, (req, res) => {
+  let seance = req.middlewareData.seance
+
+  let startTime = moment.createFromInput(req.body.startDate, req.body.startTime)
+  let endTime = moment.createFromInput(req.body.startDate, req.body.endTime)
+
+  let newSeance = {
+    startTime: startTime,
+    endTime: endTime,
+    comments: req.body.comments
+  }
+
+  let query = {_id: seance._id}
+
+  Seance.update(query, newSeance, (err, seanceUpdated) => {
+    if(err) {
+      console.log(err)
+    } else {
+      req.flash("success", "La séance a été modifiée.")
+      res.redirect("/app/patient/seance/" + seance._id)
+    }
+  })
+})
 
 
 //Formatage de la date donnée en input
-function dateValidation(value) {
+/*function dateValidation(value) {
   let split = value.split(/\//);
 		if(value.match(/^[0-3]?[0-9]\/[0-1]?[0-9]\/[0-9]{4}$/))
 			return split[2]+'-'+split[1]+'-'+split[0];
@@ -196,7 +245,7 @@ function dateValidation(value) {
     }
 		else
 			return null;
-}
+}*/
 
 
 module.exports = router
