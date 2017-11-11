@@ -5,5 +5,13 @@ block variables
 
 block content
   h1 Agenda
-  p Merci de vous connecter si ce n'est pas encore fait.
+  
+  #calendar
+    
+  script(src="/js/agenda.js")
+  script.
+    $(function() {
+      var events = !{ events };
+      agenda(events);
+    })
     

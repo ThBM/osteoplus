@@ -31,7 +31,7 @@ function checkUserRightsForPatient(req, res, next) {
 //Middleware pour vérifier que l'utilisateur a bien les droits sur le patient concernant la séance
 function checkUserRightsForPatientSeance(req, res, next) {
   Seance.findById(req.params.id).populate("patient").exec( (err, seance) => {
-    //if(err) console.log(err)
+    if(err) console.log(err)
     if(!seance) {
       req.flash("danger", "Cette séance n'existe pas.")
       res.redirect("/app/patient")
@@ -168,7 +168,11 @@ router.post("/:id/seance/add", checkUserRightsForPatient, (req, res) => {
   let startTime = moment.createFromInput(req.body.startDate, req.body.startTime)
   let endTime = moment.createFromInput(req.body.startDate, req.body.endTime)
 
-  console.log(startTime);
+  if(startTime > endTime) {
+    endTime = startTime.clone()
+    endTime.add(15, "m")
+    req.flash("warning", "L'heure de fin est incohérente avec l'heure de début. Elle a été modifiée automatiquement.")
+  }
 
   let seance = Seance({
     patient: patient._id,
@@ -196,6 +200,12 @@ router.post("/seance/:id", checkUserRightsForPatientSeance, (req, res) => {
 
   let startTime = moment.createFromInput(req.body.startDate, req.body.startTime)
   let endTime = moment.createFromInput(req.body.startDate, req.body.endTime)
+
+  if(startTime > endTime) {
+    endTime = startTime.clone()
+    endTime.add(15, "m")
+    req.flash("warning", "L'heure de fin est incohérente avec l'heure de début. Elle a été modifiée automatiquement.")
+  }
 
   let newSeance = {
     startTime: startTime,
