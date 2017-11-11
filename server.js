@@ -78,11 +78,9 @@ server.set("view engine", "pug")
 
 //Routes
 server.get("/", (req, res) => {
-  if(!req.user) {
-    res.redirect("/user/login")
-  } else {
+
     res.render("index")
-  }
+
 })
 
 //Include routes
@@ -98,9 +96,12 @@ server.use("/app", app)
 
 
 
+  //Admin commands
+let admin = require("./routes/admin")
+server.use("/admin", admin)
 
 
 
 server.listen(3000, function() {
-  console.log("Server started on port 3001")
+  console.log("Server started on port 3000")
 })

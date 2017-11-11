@@ -7,20 +7,23 @@ block content
   h1 Inscription
   form(method="POST", action="/user/register")
     #from-group
-      label Nom entier :
-      input.form-control(name="name", type="text")
+      label Prénom :
+      input.form-control(name="firstName", type="text", value=postValues ? postValues.firstName : "", required)
+    #from-group
+      label Nom :
+      input.form-control(name="lastName", type="text", value=postValues ? postValues.lastName : "", required)
     #from-group
       label Email :
-      input.form-control(name="email", type="email")
+      input.form-control(name="email", type="email", value=postValues ? postValues.email : "", required)
     #from-group
       label Nom d'utilisateur :
-      input.form-control(name="username", type="text")
+      input.form-control(name="username", type="text", value=postValues ? postValues.username : "", required)
     #from-group
       label Mot de passe :
-      input.form-control(name="password", type="password")
+      input.form-control(name="password", pattern=".{6,}", title="Le mot de passe doit contenir au moins 6 charactères.", type="password", required)
     #from-group
       label Confirmer le mot de passe :
-      input.form-control(name="password2", type="password")
+      input.form-control(name="password2", type="password", required)
     br
     input.btn.btn-primary(type="submit", value="Inscription")
       

@@ -15,7 +15,8 @@ router.get("/", (req, res) => {
 //Modifier le profil
 router.post("/", (req, res) => {
   //Validation des données
-  req.checkBody("name", "Le nom est obligatoire.").not().isEmpty()
+  req.checkBody("lastName", "Le nom est obligatoire.").not().isEmpty()
+  req.checkBody("firstName", "Le prénom est obligatoire.").not().isEmpty()
 
   const errors = req.validationErrors();
   if (errors) {
@@ -25,7 +26,8 @@ router.post("/", (req, res) => {
     res.redirect("/app/user")
   } else {
     let newUser = {
-      name: req.body.name,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       email: req.body.email
     }
 

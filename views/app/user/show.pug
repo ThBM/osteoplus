@@ -19,14 +19,18 @@ block content
     
     table.table.table-striped
       tbody
-          tr
-            th(style="width: 200px;") Nom complet
-            td
-              input.form-control.editable(name="name", value=user.name, required)
-          tr
-            th Email
-            td
-              input.form-control.editable(name="email", type="email", value=user.email, required)
+        tr
+          th(style="width: 200px;") Prénom
+          td
+            input.form-control.editable(name="firstName", value=user.firstName, required)
+        tr
+          th Nom
+          td
+            input.form-control.editable(name="lastName", value=user.lastName, required)
+        tr
+          th Email
+          td
+            input.form-control.editable(name="email", type="email", value=user.email, required)
   
   
 
