@@ -52,21 +52,24 @@ router.get("/dashboard", (req, res) => {
       return a;
     }, {});
 
-    let data = [
-      ["Janvier", seancesByMonth.lastYear["janvier"], seancesByMonth.currentYear["janvier"]],
-      ["Février", seancesByMonth.lastYear["février"], seancesByMonth.currentYear["février"]],
-      ["Mars", seancesByMonth.lastYear["mars"], seancesByMonth.currentYear["mars"]],
-      ["Avril", seancesByMonth.lastYear["avril"], seancesByMonth.currentYear["avril"]],
-      ["Mai", seancesByMonth.lastYear["mai"], seancesByMonth.currentYear["mai"]],
-      ["Juin", seancesByMonth.lastYear["juin"], seancesByMonth.currentYear["juin"]],
-      ["Juillet", seancesByMonth.lastYear["juillet"], seancesByMonth.currentYear["juillet"]],
-      ["Août", seancesByMonth.lastYear["août"], seancesByMonth.currentYear["août"]],
-      ["Septembre", seancesByMonth.lastYear["septembre"], seancesByMonth.currentYear["septembre"]],
-      ["Octobre", seancesByMonth.lastYear["octobre"], seancesByMonth.currentYear["octobre"]],
-      ["Novembre", seancesByMonth.lastYear["novembre"], seancesByMonth.currentYear["novembre"]],
-      ["Décembre", seancesByMonth.lastYear["décembre"], seancesByMonth.currentYear["décembre"]]
-    ]
-
+    if (seancesByMonth) {
+      let data = [
+        ["Janvier", seancesByMonth.lastYear["janvier"], seancesByMonth.currentYear["janvier"]],
+        ["Février", seancesByMonth.lastYear["février"], seancesByMonth.currentYear["février"]],
+        ["Mars", seancesByMonth.lastYear["mars"], seancesByMonth.currentYear["mars"]],
+        ["Avril", seancesByMonth.lastYear["avril"], seancesByMonth.currentYear["avril"]],
+        ["Mai", seancesByMonth.lastYear["mai"], seancesByMonth.currentYear["mai"]],
+        ["Juin", seancesByMonth.lastYear["juin"], seancesByMonth.currentYear["juin"]],
+        ["Juillet", seancesByMonth.lastYear["juillet"], seancesByMonth.currentYear["juillet"]],
+        ["Août", seancesByMonth.lastYear["août"], seancesByMonth.currentYear["août"]],
+        ["Septembre", seancesByMonth.lastYear["septembre"], seancesByMonth.currentYear["septembre"]],
+        ["Octobre", seancesByMonth.lastYear["octobre"], seancesByMonth.currentYear["octobre"]],
+        ["Novembre", seancesByMonth.lastYear["novembre"], seancesByMonth.currentYear["novembre"]],
+        ["Décembre", seancesByMonth.lastYear["décembre"], seancesByMonth.currentYear["décembre"]]
+      ]
+    } else {
+      let data = []
+    }
 
     //res.render("app/agenda", { events: JSON.stringify(eventsForUser) })
     res.render("app/dashboard", {data: JSON.stringify(data)})
