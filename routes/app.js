@@ -25,7 +25,52 @@ router.use(ensureAuthenticated)
 
 //Dashboard
 router.get("/dashboard", (req, res) => {
-  res.render("app/dashboard")
+
+  let currentYear = moment().format("YYYY")
+  let lastYear = moment().subtract(1, "years").format("YYYY")
+
+  Seance.find({
+    startTime: {
+      $lte: moment(),
+      $gte: moment(lastYear)
+    }
+  }).populate("patient").exec( (err, seances) => {
+    if (err) console.log(err)
+
+    let seancesForUser = seances.filter( seance => seance.patient.user.equals(req.user._id) )
+
+    var seancesByMonth = seancesForUser.reduce((a, b) => {
+      var year = b.startTime.format("YYYY") == currentYear ? "currentYear" : "lastYear"
+      var month = b.startTime.format("MMMM")
+      if (!a.hasOwnProperty(year)) {
+        a[year] = [];
+        a[year][month] = 0
+      } else if(!a[year].hasOwnProperty(month)) {
+        a[year][month] = 0
+      }
+      a[year][month]++;
+      return a;
+    }, {});
+
+    let data = [
+      ["Janvier", seancesByMonth.lastYear["janvier"], seancesByMonth.currentYear["janvier"]],
+      ["Février", seancesByMonth.lastYear["février"], seancesByMonth.currentYear["février"]],
+      ["Mars", seancesByMonth.lastYear["mars"], seancesByMonth.currentYear["mars"]],
+      ["Avril", seancesByMonth.lastYear["avril"], seancesByMonth.currentYear["avril"]],
+      ["Mai", seancesByMonth.lastYear["mai"], seancesByMonth.currentYear["mai"]],
+      ["Juin", seancesByMonth.lastYear["juin"], seancesByMonth.currentYear["juin"]],
+      ["Juillet", seancesByMonth.lastYear["juillet"], seancesByMonth.currentYear["juillet"]],
+      ["Août", seancesByMonth.lastYear["août"], seancesByMonth.currentYear["août"]],
+      ["Septembre", seancesByMonth.lastYear["septembre"], seancesByMonth.currentYear["septembre"]],
+      ["Octobre", seancesByMonth.lastYear["octobre"], seancesByMonth.currentYear["octobre"]],
+      ["Novembre", seancesByMonth.lastYear["novembre"], seancesByMonth.currentYear["novembre"]],
+      ["Décembre", seancesByMonth.lastYear["décembre"], seancesByMonth.currentYear["décembre"]]
+    ]
+
+
+    //res.render("app/agenda", { events: JSON.stringify(eventsForUser) })
+    res.render("app/dashboard", {data: JSON.stringify(data)})
+  })
 })
 
 //Agenda

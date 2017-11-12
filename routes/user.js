@@ -34,7 +34,6 @@ router.post("/register", (req, res) => {
     }
     res.render("user/register", {postValues: req.body})
   } else {
-
     User.findOne({username: req.body.username}, (err, user) => {
       if(err) console.log(err);
       if(user) {

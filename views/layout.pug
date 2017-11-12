@@ -11,7 +11,8 @@ html
     script(src="/bower_components/bootstrap/dist/js/bootstrap.js")
     script(src="/bower_components/fullcalendar/dist/fullcalendar.js")
     script(src="/bower_components/fullcalendar/dist/locale/fr.js")
-    script(src="/js/main.js")
+    script(type="text/javascript", src="https://www.gstatic.com/charts/loader.js")
+    script(type="text/javascript", src="/js/main.js")
   body
     nav.navbar.navbar-inverse
       .container
@@ -31,12 +32,10 @@ html
                 a(href='/app/agenda') Agenda
               li(class= menu == "Patients" ? "active" : "")
                 a(href='/app/patient') Patients
-              li(class= menu == "Séances" ? "active" : "")
-                a(href='/app/seances') Séances
           ul.nav.navbar-nav.navbar-right
             if user
               li(class= menu == "Profil" ? "active" : "")
-                a(href="/app/user") Profil
+                a(href="/app/user") Profil - #{user.username}
               li
                 a(href="/user/logout") Déconnexion
             else
