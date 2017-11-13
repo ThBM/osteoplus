@@ -38,3 +38,7 @@ block content
             th Commentaires
             td(colspan=2)
               textarea.form-control.editable(name="comments", placeholder="Commentaires")= seance.comments
+          tr
+            th Facturé
+            td(colspan=2)
+              input.form-control.editable(name="fees", placeholder="Facturé XX.XX", type="number", step="0.01", value=seance.fees)

@@ -200,6 +200,7 @@ router.post("/seance/:id", checkUserRightsForPatientSeance, (req, res) => {
 
   let startTime = moment.createFromInput(req.body.startDate, req.body.startTime)
   let endTime = moment.createFromInput(req.body.startDate, req.body.endTime)
+  let fees = Number(req.body.fees)
 
   if(startTime > endTime) {
     endTime = startTime.clone()
@@ -210,7 +211,8 @@ router.post("/seance/:id", checkUserRightsForPatientSeance, (req, res) => {
   let newSeance = {
     startTime: startTime,
     endTime: endTime,
-    comments: req.body.comments
+    comments: req.body.comments,
+    fees: fees
   }
 
   let query = {_id: seance._id}
