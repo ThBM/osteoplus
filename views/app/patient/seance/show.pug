@@ -40,5 +40,7 @@ block content
               textarea.form-control.editable(name="comments", placeholder="Commentaires")= seance.comments
           tr
             th Facturé
-            td(colspan=2)
+            td
               input.form-control.editable(name="fees", placeholder="Facturé XX.XX", type="number", step="0.01", value=seance.fees)
+            td
+              a.btn.btn-default(href="/app/patient/seance/" + seance._id + "/invoice") Editer la facture

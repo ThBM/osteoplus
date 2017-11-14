@@ -227,4 +227,16 @@ router.post("/seance/:id", checkUserRightsForPatientSeance, (req, res) => {
   })
 })
 
+//Afficher la facture d'une séance
+router.get("/seance/:id/invoice", checkUserRightsForPatientSeance, (req, res) => {
+  let seance = req.middlewareData.seance
+
+
+  var docDefinition = { content: 'This is an sample PDF printed with pdfMake' };
+  // open the PDF in a new window
+  pdfMake.createPdf(docDefinition).open();
+
+  res.render("app/patient/seance/show", {patient: seance.patient, seance: seance})
+})
+
 module.exports = router
