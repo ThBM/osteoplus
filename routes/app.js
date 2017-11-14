@@ -39,6 +39,7 @@ router.get("/dashboard", (req, res) => {
 
     let seancesForUser = seances.filter( seance => seance.patient.user.equals(req.user._id) )
 
+    //Séances number by month
     var seancesByMonth = seancesForUser.reduce((a, b) => {
       var year = b.startTime.format("YYYY") == currentYear ? "currentYear" : "lastYear"
       var month = b.startTime.format("MMMM")
@@ -52,17 +53,40 @@ router.get("/dashboard", (req, res) => {
       return a;
     }, {});
 
+    //Seances Fees by month
+    var feesByMonth = seancesForUser.reduce((a, b) => {
+      var year = b.startTime.format("YYYY") == currentYear ? "currentYear" : "lastYear"
+      var month = b.startTime.format("MMMM")
+      var fees = (Number(b.fees)) ? Number(b.fees) : 0
+      if (!a.hasOwnProperty(year)) {
+        a[year] = [];
+        a[year][month] = 0
+      } else if(!a[year].hasOwnProperty(month)) {
+        a[year][month] = 0
+      }
+      a[year][month] = a[year][month] + fees;
+      return a;
+    }, {});    
+
     let monthes = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
-    let data = []
+    let dataSeances = []
     monthes.forEach( (e) => {
-      data.push([
+      dataSeances.push([
         e,
         seancesByMonth.lastYear ? seancesByMonth.lastYear[e] : 0,
         seancesByMonth.currentYear ? seancesByMonth.currentYear[e] : 0
       ])
     })
+    let dataFees = []
+    monthes.forEach( (e) => {
+      dataFees.push([
+        e,
+        feesByMonth.lastYear ? feesByMonth.lastYear[e] : 0,
+        feesByMonth.currentYear ? feesByMonth.currentYear[e] : 0
+      ])
+    })
 
-    res.render("app/dashboard", {data: JSON.stringify(data)})
+    res.render("app/dashboard", {dataSeances: JSON.stringify(dataSeances), dataFees: JSON.stringify(dataFees)})
   })
 })
 

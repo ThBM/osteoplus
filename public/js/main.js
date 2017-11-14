@@ -37,6 +37,7 @@ $(function() {
     }
   })
 
+
   //Jour par d=fault est aujourd'hui
   $("select.dateInput-day.nowDefault").val(moment().format("DD"));
   $("select.dateInput-month.nowDefault").val(moment().format("MM"));
